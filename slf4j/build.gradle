@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+configurations.all {
+    exclude group: 'org.apache.logging.log4j', module: 'log4j-core'
+    exclude group: 'log4j', module: 'log4j'
+    // todo: exclude all of the slf4j-over-*, since we're using logback
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
+
+dependencies {
+    implementation(project(':lib')) {
+        transitive = false
+    }
+
+    implementation platform('org.slf4j:slf4j-parent:2.0.0-alpha5')
+    implementation 'org.slf4j:jcl-over-slf4j:2.0.0-alpha5'
+    implementation 'org.slf4j:slf4j-jdk-platform-logging:2.0.0-alpha5'
+    implementation 'ch.qos.logback:logback-classic:1.3.0-alpha10'
+    implementation 'org.slf4j:jul-to-slf4j:2.0.0-alpha5'
+    implementation 'org.slf4j:log4j-over-slf4j:2.0.0-alpha5'
+    implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.16.0'
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+}
+
+test {
+    useJUnitPlatform()
+}
